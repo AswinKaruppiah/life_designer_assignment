@@ -1,6 +1,12 @@
 import { createContext, useState, useEffect, type ReactNode } from "react";
 import toast from "react-hot-toast";
 
+export const columnLabels = {
+  todo: "To Do",
+  inProgress: "In Progress",
+  done: "Done",
+};
+
 export const COLUMN_TAG = {
   TODO: "todo",
   IN_PROGRESS: "inProgress",
@@ -72,7 +78,7 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
 
       return updated;
     });
-    toast.success(`Task moved to ${target}.`);
+    toast.success(`Task moved to "${columnLabels[target]}".`);
   };
 
   const deleteTask = (id: number, column: Note["column"]) => {

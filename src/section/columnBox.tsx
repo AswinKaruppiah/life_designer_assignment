@@ -1,6 +1,11 @@
 import { DragDropProvider, useDraggable, useDroppable } from "@dnd-kit/react";
 import { useTasks } from "../hooks/useTasks";
-import { COLUMN_TAG, type ColumnTag, type Note } from "../Provider/TaskContext";
+import {
+  COLUMN_TAG,
+  columnLabels,
+  type ColumnTag,
+  type Note,
+} from "../Provider/TaskContext";
 
 export default function ColumnBox() {
   const { tasks } = useTasks();
@@ -28,21 +33,21 @@ export default function ColumnBox() {
         <ColumnCard
           data={tasks.todo}
           columnType={COLUMN_TAG.TODO}
-          title="To Do"
+          title={columnLabels[COLUMN_TAG.TODO]}
         />
 
         {/* IN PROGRESS */}
         <ColumnCard
           data={tasks.inProgress}
           columnType={COLUMN_TAG.IN_PROGRESS}
-          title="In Progress"
+          title={columnLabels[COLUMN_TAG.IN_PROGRESS]}
         />
 
         {/* DONE */}
         <ColumnCard
           data={tasks.done}
           columnType={COLUMN_TAG.DONE}
-          title="Done"
+          title={columnLabels[COLUMN_TAG.DONE]}
         />
       </div>
     </DragDropProvider>
