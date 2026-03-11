@@ -1,28 +1,51 @@
+import { DragDropProvider, useDraggable, useDroppable } from "@dnd-kit/react";
 import { useTasks } from "../hooks/useTasks";
 import { COLUMN_TAG, type ColumnTag, type Note } from "../Provider/TaskContext";
 
 export default function ColumnBox() {
   const { tasks } = useTasks();
+  const { moveTask } = useTasks();
+
+  function handleDragEnd(event: any) {
+    if (event.canceled) return;
+
+    const { source, target } = event.operation;
+
+    const task = source?.data?.task as Note;
+    const targetColumn = target?.id as ColumnTag;
+
+    if (!task || !targetColumn) return;
+
+    if (task.column !== targetColumn) {
+      moveTask(task, targetColumn);
+    }
+  }
 
   return (
-    <div className="gap-6 grid grid-cols-3 p-6">
-      {/* TODO */}
-      <ColumnCard
-        data={tasks.todo}
-        columnType={COLUMN_TAG.TODO}
-        title="To Do"
-      />
+    <DragDropProvider onDragEnd={handleDragEnd}>
+      <div className="gap-6 grid grid-cols-3 p-6">
+        {/* TODO */}
+        <ColumnCard
+          data={tasks.todo}
+          columnType={COLUMN_TAG.TODO}
+          title="To Do"
+        />
 
-      {/* IN PROGRESS */}
-      <ColumnCard
-        data={tasks.inProgress}
-        columnType={COLUMN_TAG.IN_PROGRESS}
-        title="In Progress"
-      />
+        {/* IN PROGRESS */}
+        <ColumnCard
+          data={tasks.inProgress}
+          columnType={COLUMN_TAG.IN_PROGRESS}
+          title="In Progress"
+        />
 
-      {/* DONE */}
-      <ColumnCard data={tasks.done} columnType={COLUMN_TAG.DONE} title="Done" />
-    </div>
+        {/* DONE */}
+        <ColumnCard
+          data={tasks.done}
+          columnType={COLUMN_TAG.DONE}
+          title="Done"
+        />
+      </div>
+    </DragDropProvider>
   );
 }
 
@@ -33,8 +56,12 @@ type ColumnCardProps = {
 };
 
 const ColumnCard = ({ data, columnType, title }: ColumnCardProps) => {
+  const { ref } = useDroppable({
+    id: columnType,
+  });
+
   return (
-    <div className="bg-gray-50 p-4 min-h-screen h-fit rounded">
+    <div ref={ref} className="bg-gray-50 p-4 min-h-screen h-fit rounded">
       <h2 className="font-bold mb-6">{title}</h2>
       {data.length ? (
         data.map((task) => (
@@ -54,13 +81,21 @@ type TaskCardProps = {
 
 const TaskCard = ({ task, column }: TaskCardProps) => {
   const { deleteTask, moveTask } = useTasks();
+  const { ref, isDragging } = useDraggable({
+    id: task.id,
+    data: { task },
+  });
 
   return (
-    <div key={task.id} className="bg-white p-3 rounded shadow mb-3">
+    <div
+      ref={ref}
+      key={task.id}
+      className={`bg-white min-h-40 flex flex-col justify-between ${isDragging ? "shadow-amber-200 shadow-lg" : ""} hover:shadow-amber-200 hover:shadow-lg transition-all p-3 cursor-grab rounded shadow mb-3`}
+    >
       <div className="flex justify-between items-start gap-1.5">
         <div>
           <h3 className="font-semibold">{task.title}</h3>
-          <p>{task.desc}</p>
+          <p className="text-black/50 mt-1.5 text-balance">{task.desc}</p>
         </div>
         <button
           className="text-red-500"
@@ -70,7 +105,7 @@ const TaskCard = ({ task, column }: TaskCardProps) => {
         </button>
       </div>
 
-      <div className="flex gap-2 mt-3 text-sm">
+      <div className="flex gap-2 mt-4 text-sm">
         {column != COLUMN_TAG.TODO && (
           <button
             onClick={() => moveTask(task, COLUMN_TAG.TODO)}
