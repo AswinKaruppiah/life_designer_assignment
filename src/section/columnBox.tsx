@@ -34,12 +34,15 @@ type ColumnCardProps = {
 
 const ColumnCard = ({ data, columnType, title }: ColumnCardProps) => {
   return (
-    <div className="bg-gray-100 p-4 min-h-screen h-fit rounded">
-      <h2 className="font-bold mb-4">{title}</h2>
-
-      {data.map((task) => (
-        <TaskCard key={task.id} task={task} column={columnType} />
-      ))}
+    <div className="bg-gray-50 p-4 min-h-screen h-fit rounded">
+      <h2 className="font-bold mb-6">{title}</h2>
+      {data.length ? (
+        data.map((task) => (
+          <TaskCard key={task.id} task={task} column={columnType} />
+        ))
+      ) : (
+        <h3 className="text-2xl text-center my-4">No tasks in this column</h3>
+      )}
     </div>
   );
 };
