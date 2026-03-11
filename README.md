@@ -8,8 +8,8 @@ Build a simple **Kanban-style task board** to manage tasks across different stag
 
 ## Live Demo
 
-**Live Link:**
-`https://life-designer-assignment.vercel.app/`
+**Live Link:**  
+[View Live Demo](https://life-designer-assignment.vercel.app/)
 
 ---
 
@@ -57,9 +57,3 @@ Global state is managed using the **React Context API**, allowing components to 
 ### Data Persistence
 
 All tasks are stored in **localStorage**, ensuring tasks remain available even after refreshing the page.
-
----
-
-## Demo Video
-
-`Add demo video link here`
