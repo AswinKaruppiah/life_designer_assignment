@@ -48,7 +48,7 @@ New tasks are initially added to the **To Do** column.
 
 ### Drag & Drop
 
-Tasks can be moved between columns (**To Do → In Progress → Done**) using **drag-and-drop** implemented with **dnd-kit**.
+Tasks can be moved **directly between any columns** (To Do, In Progress, or Done) using **drag-and-drop** implemented with **dnd-kit**, or by using the **move buttons** available on each task.
 
 ### State Management
 
